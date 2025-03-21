@@ -1,0 +1,260 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "CRM Tool",
+    "version": "1.0.0",
+    "description": "API for managing contacts, deals, and tickets in a CRM system."
+  },
+  "paths": {
+    "/contacts": {
+      "post": {
+        "summary": "Create or update a contact",
+        "description": "Creates or updates a contact in the CRM system.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Contact"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact created or updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "contact_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deals": {
+      "post": {
+        "summary": "Create or update a deal",
+        "description": "Creates or updates a deal in the CRM system.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Deal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Deal created or updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "deal_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tickets": {
+      "post": {
+        "summary": "Create a ticket",
+        "description": "Creates a ticket in the CRM system.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ticket"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ticket created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "ticket_id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/crm-objects": {
+      "get": {
+        "summary": "Get new CRM objects",
+        "description": "Retrieves a paginated list of new CRM objects.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Number of items per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of CRM objects retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "firstname", "lastname", "phone"]
+      },
+      "Deal": {
+        "type": "object",
+        "properties": {
+          "dealname": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number",
+            "format": "float"
+          },
+          "dealstage": {
+            "type": "string",
+            "enum": ["appointmentscheduled", "qualifiedtobuy", "presentationscheduled", "decisionmakerboughtin", "contractsent", "closedwon", "closedlost"]
+          },
+          "contact_email": {
+            "type": "string",
+            "format": "email"
+          },
+          "contact_id": {
+            "type": "string"
+          }
+        },
+        "required": ["dealname", "amount", "dealstage"]
+      },
+      "Ticket": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["general_inquiry", "technical_issue", "billing", "service_request", "meeting"]
+          },
+          "pipeline": {
+            "type": "string"
+          },
+          "hs_ticket_priority": {
+            "type": "string",
+            "enum": ["LOW", "MEDIUM", "HIGH", "URGENT"]
+          },
+          "hs_pipeline_stage": {
+            "type": "integer",
+            "enum": [1, 2, 3, 4]
+          },
+          "contact_email": {
+            "type": "string",
+            "format": "email"
+          },
+          "contact_id": {
+            "type": "string"
+          },
+          "deal_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["subject", "description", "category", "pipeline", "hs_ticket_priority", "hs_pipeline_stage", "deal_ids"]
+      }
+    }
+  }
+}
