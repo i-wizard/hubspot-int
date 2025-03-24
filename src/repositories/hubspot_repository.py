@@ -5,7 +5,7 @@ from typing import Dict, Any, List, Union
 import requests
 from requests import RequestException
 
-from src.config import logger
+from src.config import logger, Config
 from src.repositories import IRepository
 from src.schemas.contact_schema import ContactSchema
 from src.schemas.deal_schema import DealSchema
@@ -21,7 +21,7 @@ from src.services.interfaces.token_interface import ITokenService
 
 
 class HubSpotRepository(IRepository):
-    BASE_URL = "https://api.hubapi.com"
+    BASE_URL = Config.HUBSPOT_API_BASE
 
     def __init__(self, token_service: ITokenService):
         self.token_service = token_service

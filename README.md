@@ -32,9 +32,9 @@ pip install -r requirements.txt
 ```
 
 ### Environment Configuration
-Copy `.env.example` to `.env` and configure the variables:
+Copy `sample.env` to `.env` and configure the variables:
 ```bash
-cp .env.example .env
+cp sample.env .env
 ```
 
 Edit `.env` with your environment-specific settings (see [Environment Variable Configurations](#environment-variable-configurations)).
